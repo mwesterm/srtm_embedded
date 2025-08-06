@@ -11,6 +11,7 @@ You have to implement a file-handling type by implement the trait HgtReader.
 
 ## Usage/Examples
 see  example/std_linux.rs  for an example running under Linux with std::io
+see  tests/no_std_test.rs for an example runninig in no_std enviroment (as template for embedded devices)
 
 
 ## Authors

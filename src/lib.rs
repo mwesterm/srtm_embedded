@@ -12,6 +12,7 @@ pub mod tiles;
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Error {
     NotFound,
+    ReadError,
     ParseLatLong,
     FileNotFound,
     Filesize,

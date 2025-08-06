@@ -81,9 +81,9 @@ checksum = "5b63caa9aa9397e2d9480a9b13673856c78d8ac123288526c37d7839f2a86990"
 
 [[package]]
 name = "defmt"
-version = "0.3.10"
+version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "86f6162c53f659f65d00619fe31f14556a6e9f8752ccc4a41bd177ffcf3d6130"
+checksum = "548d977b6da32fa1d1fda2876453da1e7df63ad0304c8b3dae4dbe7b96f39b78"
 dependencies = [
  "bitflags",
  "defmt-macros",
@@ -91,9 +91,9 @@ dependencies = [
 
 [[package]]
 name = "defmt-macros"
-version = "0.4.0"
+version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9d135dd939bad62d7490b0002602d35b358dce5fd9233a709d3c1ef467d4bde6"
+checksum = "3d4fc12a85bcf441cfe44344c4b72d58493178ce635338a3f3b78943aceb258e"
 dependencies = [
  "defmt-parser",
  "proc-macro-error2",
@@ -104,9 +104,9 @@ dependencies = [
 
 [[package]]
 name = "defmt-parser"
-version = "0.4.1"
+version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3983b127f13995e68c1e29071e5d115cd96f215ccb5e6812e3728cd6f92653b3"
+checksum = "10d60334b3b2e7c9d91ef8150abfb6fa4c1c39ebbcf4a81c2e346aad939fee3e"
 dependencies = [
  "thiserror",
 ]
@@ -194,6 +194,15 @@ name = "memchr"
 version = "2.7.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "78ca9ab1a0babb1e7d5695e3530886289c18cf2f87ec19a575a0abdce112e3a3"
+
+[[package]]
+name = "no_std_io"
+version = "0.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7fa5f306a6f2c01b4fd172f29bb46195b1764061bf926c75e96ff55df3178208"
+dependencies = [
+ "memchr",
+]
 
 [[package]]
 name = "once_cell"
@@ -313,6 +322,7 @@ dependencies = [
  "env_logger",
  "heapless",
  "log",
+ "no_std_io",
 ]
 
 [[package]]

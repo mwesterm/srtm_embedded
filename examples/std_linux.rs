@@ -1,9 +1,8 @@
-use core::error;
 use log::{debug, error, info};
 use srtm_embedded::{HgtReader, Resolution, Tile, coords};
+use std::fs::File;
 use std::io::{Read, Seek, SeekFrom};
 use std::result::Result;
-use std::{error::Error, fs::File};
 
 struct HgtReaderStd {
     file: Option<File>,
