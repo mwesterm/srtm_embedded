@@ -16,7 +16,6 @@ keywords = [  "embedded",  # The package categories
   "srmt",
   "GIS",
 ]  # Keywords for the package
-rust-version = "1.81"
 readme = "README.md"  # The path to the README file
 
 
