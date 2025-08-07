@@ -108,6 +108,6 @@ fn main() {
     let reader = HgtReaderStd::new();
     let mut tile = Tile::<HgtReaderStd>::new(Resolution::SRTM1, reader);
     let height = tile.get_height::<HgtReaderStd>((latitude, longitude));
-    assert_eq!(height, Some(127), "Height retrieval failed");
+    assert_eq!(height, Ok(127), "Height retrieval failed");
     debug!("Height: {:?}", height);
 }

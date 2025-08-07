@@ -153,7 +153,7 @@ mod tests {
         let reader = HgtReaderNoStd::new();
         let mut tile = Tile::<HgtReaderNoStd>::new(Resolution::SRTM1, reader);
         let height = tile.get_height::<HgtReaderNoStd>((latitude, longitude));
-        assert_eq!(height, Some(127), "Height retrieval failed");
-        assert_ne!(height, Some(128), "Height retrieval failed");
+        assert_eq!(height, Ok(127), "Height retrieval failed");
+        assert_ne!(height, Ok(128), "Height retrieval failed");
     }
 }

@@ -1,5 +1,15 @@
+/// Custom round function for f64 in no_std environments
+fn round_f64(x: f64) -> f64 {
+    let i = if x < 0.0 {
+        (x - 0.5) as i64
+    } else {
+        (x + 0.5) as i64
+    };
+    i as f64
+}
+
 use super::Coord;
-use crate::{HgtReader, resolutions::Resolution};
+use crate::{Error, HgtReader, resolutions::Resolution};
 
 #[derive(Debug, Clone, PartialEq, Eq, Default)]
 pub struct Tile<R: HgtReader> {
@@ -44,59 +54,35 @@ impl<R: HgtReader> Tile<R> {
     /// * `Option<i16>` - The height value if successful, or `None` if an error
     ///   occurs or if the height data is invalid.
 
-    pub fn get_height<Reader: HgtReader>(&mut self, coord: impl Into<Coord>) -> Option<i16> {
+    pub fn get_height<Reader: HgtReader>(&mut self, coord: impl Into<Coord>) -> Result<i16, Error> {
         let coord: Coord = coord.into();
         let filename = coord.get_filename();
 
-        if self
-            .data_reader
+        self.data_reader
             .open_hgt_file(filename.as_str())
             .and_then(|_| {
                 self.data_reader
                     .check_hgt_file(self.resolution.expected_file_length() as u64)
-            })
-            .is_err()
-        {
-            error!("Failed to process file: {:?}", filename);
-            return None;
-        }
+            })?;
         let coord_trunc = coord.trunc();
         let res_size = self.resolution.point_per_degree();
-        let lat_diff = (1.0 - (coord.lat - coord_trunc.0 as f64)) * (res_size as f64 - 1.0);
+        let lat_diff: f64 = (1.0 - (coord.lat - coord_trunc.0 as f64)) * (res_size as f64 - 1.0);
         let lon_diff = (coord.lon - coord_trunc.1 as f64) * (res_size as f64 - 1.0);
-        let row = lat_diff.round() as usize;
-        let col = lon_diff.round() as usize;
+        let row = round_f64(lat_diff) as usize;
+        let col = round_f64(lon_diff) as usize;
         let index = (row * res_size + col) * 2;
 
         if index >= self.resolution.expected_file_length() {
-            error!(
-                "index {index} is out of bounds for file length {}",
-                self.resolution.expected_file_length()
-            );
-            return None;
+            return Err(Error::IndexOutOfBounds);
         }
         let mut buffer = [0; 2];
-        if self
-            .data_reader
-            .read_hgt_data(index as u64, &mut buffer)
-            .is_err()
-        {
-            error!(
-                "Failed to read data at index {index} in file: {:?}",
-                filename
-            );
-            return None;
-        }
+        self.data_reader.read_hgt_data(index as u64, &mut buffer)?;
 
         let height = i16::from_be_bytes(buffer);
         if height == -32768 {
-            error!(
-                "WARNING: in file {:?} {coord:?} doesn't contain a valid elevation: {height:?}",
-                filename
-            );
-            None
+            Err(Error::InvalidData)
         } else {
-            Some(height)
+            Ok(height)
         }
     }
 }
