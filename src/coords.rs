@@ -53,12 +53,10 @@ impl Coord {
      */
 
     /// Truncates latitude and longitude to integers.
-    ///
-    /// Uses the no_std-compatible method `to_int_unchecked`.
     /// Returns: (truncated latitude as i8, truncated longitude as i16)
     pub fn trunc(&self) -> (i8, i16) {
-        let lat_trunc = unsafe { self.lat.to_int_unchecked::<i8>() };
-        let lon_trunc = unsafe { self.lon.to_int_unchecked::<i16>() };
+        let lat_trunc = self.lat as i8;
+        let lon_trunc = self.lon as i16;
         (lat_trunc, lon_trunc)
     }
 
@@ -68,7 +66,8 @@ impl Coord {
     ///
     /// # Example
     /// ```
-    /// let coord = srtm_reader::Coord::new(87.235, 10.4234423);
+    /// use srtm_embedded::Coord;
+    /// let coord = Coord::new(87.235, 10.4234423);
     /// let filename = coord.get_filename();
     /// assert_eq!(filename, "N87E010.hgt");
     /// ```
@@ -96,7 +95,8 @@ impl Coord {
     }
 }
 
-/// Allows conversion from a tuple (f64, f64) to a `Coord`.
+/// Allows conversion from a tuple of two f64 values to a `Coord`.
+/// The tuple is expected to contain valid latitude and longitude values.
 impl From<(f64, f64)> for Coord {
     fn from(value: (f64, f64)) -> Self {
         let (lat, lon) = (value.0, value.1);
